@@ -72,21 +72,69 @@
     },
     mounted: function () {
       this.$nextTick(function () {
+        let self = this
+        // project
         this.project_accordion = $(this.$el).find('.project-bz').accordion({
           onChange: function () {
+            $(window).scrollTop(0)
+            self.checkProjectFixed()
+            self.checkTypeFixed()
           }
         })
+
         this.project_accordion.accordion('open', 0)
 
         // type
         this.type_accordion = $(this.$el).find('.type-bz').accordion({
           onChange: function () {
+            self.checkProjectFixed()
+            self.checkTypeFixed()
           }
         })
         this.type_accordion.accordion('open', 0)
       })
     },
     methods: {
+      checkProjectFixed: function () {
+        let title = this.project_accordion.find('.title')
+
+        title.visibility(
+          {
+            once: false,
+            onTopPassed: function () {
+              title.addClass('fixed')
+            },
+            onTopPassedReverse: function () {
+              title.removeClass('fixed')
+            }
+          }
+        )
+      },
+      checkTypeFixed: function () {
+        let title = this.type_accordion.find('.title')
+
+        title.visibility(
+          {
+            once: false,
+            onTopPassed: function () {
+              title.addClass('fixed')
+            },
+            onTopPassedReverse: function () {
+              title.removeClass('fixed')
+            }
+          }
+        )
+      },
+      select_project: function (data) {
+        this.out_work.project = data
+        this.project_accordion.accordion('close', 0)
+        this.project_is_open = !this.project_is_open
+      },
+      select_type: function (data) {
+        this.out_work.out_work_type = data
+        this.type_accordion.accordion('close', 0)
+        this.type_is_open = !this.type_is_open
+      }
     }
   }
 </script>
